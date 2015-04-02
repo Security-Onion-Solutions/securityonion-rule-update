@@ -1,0 +1,55 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ securityonion-rule-update (20120726-0ubuntu0securityonion23) precise; urgency=low
+ .
+   * Issue 639: rule-update should disable Suricata rules if running Snort
+   * Issue 650: rule-update: wipe snort_dynamicrules directory
+Author: Doug Burks <doug.burks@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- securityonion-rule-update-20120726.orig/usr/bin/rule-update
++++ securityonion-rule-update-20120726/usr/bin/rule-update
+@@ -103,6 +103,26 @@ if [ ! -f $SSH_CONF ]; then
+ 	cp /var/ossec/rules/local_rules.xml /tmp/local_rules.xml
+ 	chmod 644 /tmp/local_rules.xml
+ 
++	# If running Snort, update local_rules in pulledpork.conf and wipe snort_dynamicrules
++	if [ "$ENGINE" = "snort" ]; then
++		# Check for local Suricata rules that need to be removed
++		if grep "^local_rules=/etc/nsm/rules/local.rules,/etc/nsm/rules/decoder-events.rules,/etc/nsm/rules/stream-events.rules,/etc/nsm/rules/http-events.rules,/etc/nsm/rules/smtp-events.rules$" /etc/nsm/pulledpork/pulledpork.conf >/dev/null 2>&1; then
++			# Backup pulledpork.conf
++			cp /etc/nsm/pulledpork/pulledpork.conf /etc/nsm/pulledpork/pulledpork.conf.bak.`date +%Y%m%d`
++			# Remove local Suricata rules
++			sed -i 's|^local_rules=/etc/nsm/rules/local.rules,/etc/nsm/rules/decoder-events.rules,/etc/nsm/rules/stream-events.rules,/etc/nsm/rules/http-events.rules,/etc/nsm/rules/smtp-events.rules$|local_rules=/etc/nsm/rules/local.rules|g' /etc/nsm/pulledpork/pulledpork.conf
++		fi
++
++		# Check for .so files in snort_dynamicrules directory
++		if ls /usr/local/lib/snort_dynamicrules/*.so >/dev/null 2>&1; then
++			# Create a backup directory
++			mkdir -p /usr/local/lib/snort_dynamicrules_backup 
++			# Move the old .so files to the backup directory
++			mv /usr/local/lib/snort_dynamicrules/*.so /usr/local/lib/snort_dynamicrules_backup/ 
++		fi
++
++	fi
++
+ 	# Default to no PulledPork options
+ 	PP_OPTIONS=""
+ 

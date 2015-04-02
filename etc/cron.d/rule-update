@@ -1,0 +1,8 @@
+# /etc/cron.d/rule-update
+#
+# crontab entry to update IDS rules via PulledPork
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+01 7    * * *   root    date >> /var/log/nsm/pulledpork.log ; /usr/bin/rule-update >> /var/log/nsm/pulledpork.log 2>&1

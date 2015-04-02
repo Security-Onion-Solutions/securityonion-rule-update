@@ -1,0 +1,115 @@
+#!/bin/bash
+
+echo "This script is intended for those upgrading from:"
+echo "Barnyard2 Version 2.1.11 (Build 317)"
+echo "to:"
+echo "Barnyard2 Version 2.1.13 (Build 333)"
+echo
+echo "Please make sure all barnyard2 instances on all sensors are shut down before continuing."
+echo
+echo "You can do this by running the following command on each sensor:"
+echo "sudo nsm_sensor_ps-stop --only-barnyard2"
+echo
+echo "Once all barnyard2 instances are completely shut down, you may continue with this script."
+echo
+echo "Please note that this script may take anywhere from 1 minute to 1 hour or more,"
+echo "depending on the size of your Snorby database.  Please do not interrupt this process."
+echo
+echo "Press Enter to continue, or Ctrl-C to cancel."
+read input
+echo "Starting database update, please wait..."
+
+mysql -uroot snorby << SNORBYEND
+
+DROP PROCEDURE IF EXISTS fixsigs; 
+delimiter $$ 
+CREATE PROCEDURE fixsigs(IN proc_gid INT,OUT return_val varchar(50)) 
+BEGIN 
+DECLARE GID_COUNT INT; 
+DECLARE GID_SID_MIN INT; 
+DECLARE GID_SID_MAX INT; 
+DECLARE C_SID INT; 
+DECLARE cursorGIDSid CURSOR FOR SELECT MIN(sig_sid),MAX(sig_sid) FROM 
+signature WHERE sig_gid=proc_gid; 
+DECLARE cursorGIDcount CURSOR FOR SELECT COUNT(sig_sid) FROM signature 
+WHERE sig_gid=proc_gid GROUP BY sig_gid; 
+OPEN cursorGIDcount; 
+FETCH cursorGIDcount INTO GID_COUNT; 
+IF GID_COUNT > 1 THEN 
+SET return_val = 'OPERATED'; 
+OPEN cursorGIDSid; 
+FETCH cursorGIDSid INTO GID_SID_MIN,GID_SID_MAX; 
+SET return_val = CONCAT(return_val,' MIN:',GID_SID_MIN,' MAX: ',GID_SID_MAX); 
+
+SET C_SID = GID_SID_MIN; 
+WHILE C_SID <= GID_SID_MAX DO 
+UPDATE event SET signature=(SELECT sig_id FROM signature WHERE 
+sig_gid=proc_gid AND sig_sid=C_SID AND sig_class_id <> 0 and 
+sig_priority <> 0) WHERE signature IN (SELECT sig_id FROM signature 
+WHERE sig_gid=proc_gid AND sig_sid=C_SID AND sig_class_id ='0' and 
+sig_priority='0'); 
+DELETE FROM signature WHERE sig_gid=proc_gid AND sig_sid=C_SID AND 
+sig_class_id='0' AND sig_priority='0'; 
+
+SET C_SID = C_SID + 1; 
+END WHILE; 
+CLOSE cursorGIDSid; 
+
+ELSE 
+SET return_val = 'NOTHING TO DO'; 
+END IF; 
+CLOSE cursorGIDcount; 
+END$$ 
+delimiter ; 
+
+call fixsigs(100,@a); 
+call fixsigs(101,@a); 
+call fixsigs(102,@a); 
+call fixsigs(103,@a); 
+call fixsigs(104,@a); 
+call fixsigs(105,@a); 
+call fixsigs(106,@a); 
+call fixsigs(110,@a); 
+call fixsigs(111,@a); 
+call fixsigs(112,@a); 
+call fixsigs(113,@a); 
+call fixsigs(114,@a); 
+call fixsigs(115,@a); 
+call fixsigs(116,@a); 
+call fixsigs(117,@a); 
+call fixsigs(118,@a); 
+call fixsigs(119,@a); 
+call fixsigs(120,@a); 
+call fixsigs(121,@a); 
+call fixsigs(122,@a); 
+call fixsigs(123,@a); 
+call fixsigs(124,@a); 
+call fixsigs(125,@a); 
+call fixsigs(126,@a); 
+call fixsigs(128,@a); 
+call fixsigs(129,@a); 
+call fixsigs(130,@a); 
+call fixsigs(131,@a); 
+call fixsigs(133,@a); 
+call fixsigs(134,@a); 
+call fixsigs(135,@a); 
+call fixsigs(136,@a); 
+call fixsigs(137,@a); 
+call fixsigs(138,@a); 
+call fixsigs(139,@a); 
+call fixsigs(140,@a); 
+call fixsigs(141,@a); 
+call fixsigs(142,@a); 
+call fixsigs(143,@a); 
+call fixsigs(144,@a); 
+call fixsigs(145,@a); 
+call fixsigs(2,@a); 
+call fixsigs(3,@a);
+
+SNORBYEND
+
+echo
+echo "Database update is complete."
+echo
+echo "If there were no errors, you may restart barnyard2 by running the following command on each sensor:"
+echo "sudo nsm_sensor_ps-start --only-barnyard2"

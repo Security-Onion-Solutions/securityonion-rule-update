@@ -1,0 +1,59 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ securityonion-rule-update (20120726-0ubuntu0securityonion20) precise; urgency=low
+ .
+   * add verbosity to so-snorby-fix-sigs
+Author: Doug Burks <doug.burks@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- securityonion-rule-update-20120726.orig/usr/bin/so-snorby-fix-sigs
++++ securityonion-rule-update-20120726/usr/bin/so-snorby-fix-sigs
+@@ -1,12 +1,23 @@
+ #!/bin/bash
+ 
++echo "This script is intended for those upgrading from:"
++echo "Barnyard2 Version 2.1.11 (Build 317)"
++echo "to:"
++echo "Barnyard2 Version 2.1.13 (Build 333)"
++echo
+ echo "Please make sure all barnyard2 instances on all sensors are shut down before continuing."
+ echo
+ echo "You can do this by running the following command on each sensor:"
+ echo "sudo nsm_sensor_ps-stop --only-barnyard2"
+ echo
++echo "Once all barnyard2 instances are completely shut down, you may continue with this script."
++echo
++echo "Please note that this script may take anywhere from 1 minute to 1 hour or more,"
++echo "depending on the size of your Snorby database.  Please do not interrupt this process."
++echo
+ echo "Press Enter to continue, or Ctrl-C to cancel."
+ read input
++echo "Starting database update, please wait..."
+ 
+ mysql -uroot snorby << SNORBYEND
+ 
+@@ -98,5 +109,7 @@ call fixsigs(3,@a);
+ SNORBYEND
+ 
+ echo
++echo "Database update is complete."
++echo
+ echo "If there were no errors, you may restart barnyard2 by running the following command on each sensor:"
+ echo "sudo nsm_sensor_ps-start --only-barnyard2"

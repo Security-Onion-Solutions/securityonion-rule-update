@@ -1,0 +1,68 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ securityonion-rule-update (20120726-0ubuntu0securityonion25) precise; urgency=low
+ .
+   * Issue 679: rule-update: /etc/cron.d/rule-update should run pulledpork as unprivileged user
+Author: Doug Burks <doug.burks@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- securityonion-rule-update-20120726.orig/usr/bin/rule-update
++++ securityonion-rule-update-20120726/usr/bin/rule-update
+@@ -100,15 +100,15 @@ mkdir -p /usr/local/lib/snort_dynamicrul
+ mkdir -p /usr/local/lib/snort_dynamicrules_backup/
+ 
+ # Set permissions to allow PULLEDPORK_USER to write rules
+-#chown -R $PULLEDPORK_USER:$PULLEDPORK_GROUP /etc/nsm/rules
+-#chown -R $PULLEDPORK_USER:$PULLEDPORK_GROUP /usr/local/lib/snort_dynamicrules/
+-#mkdir -p /var/log/nsm/
+-#touch /var/log/nsm/sid_changes.log
+-#chown $PULLEDPORK_USER:$PULLEDPORK_GROUP /var/log/nsm/sid_changes.log
++chown -R $PULLEDPORK_USER:$PULLEDPORK_GROUP /etc/nsm/rules
++chown -R $PULLEDPORK_USER:$PULLEDPORK_GROUP /usr/local/lib/snort_dynamicrules/
++mkdir -p /var/log/nsm/
++touch /var/log/nsm/sid_changes.log
++chown $PULLEDPORK_USER:$PULLEDPORK_GROUP /var/log/nsm/sid_changes.log
+ 
+ # Create home dir for $PULLEDPORK_USER and set permissions
+-#mkdir -p /home/$PULLEDPORK_USER
+-#chown -R $PULLEDPORK_USER /home/$PULLEDPORK_USER
++mkdir -p /home/$PULLEDPORK_USER
++chown -R $PULLEDPORK_USER /home/$PULLEDPORK_USER
+ 
+ #########################################
+ # Is this box a master or slave?
+@@ -164,7 +164,7 @@ if [ ! -f $SSH_CONF ]; then
+ 	# Go get rules from Internet.
+ 	echo "Running PulledPork."
+ 
+-	/usr/bin/pulledpork.pl -P $PP_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf |
++	su $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P $PP_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
+ 		grep -v "normalizations disabled because not inline" |grep -v "^$"
+ 	
+ 	# If Snorby is enabled, then we need to wipe and update Snorby's sig_reference table
+@@ -282,7 +282,7 @@ else
+ 
+ 		# Process rules local to sensor without starting a separate download.
+ 		echo "Running PulledPork."		
+-		/usr/bin/pulledpork.pl -P -n "$PP_OPTIONS" -c /etc/nsm/pulledpork/pulledpork.conf |
++		su $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P -n "$PP_OPTIONS" -c /etc/nsm/pulledpork/pulledpork.conf" |
+ 			grep -v "normalizations disabled because not inline" |grep -v "^$"
+ 	else
+ 		#### Default ####

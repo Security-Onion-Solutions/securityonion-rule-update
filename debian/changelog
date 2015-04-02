@@ -1,0 +1,166 @@
+securityonion-rule-update (20120726-0ubuntu0securityonion27) precise; urgency=low
+
+  * su - to change to home directory to prevent issues 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 01 Apr 2015 19:52:08 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion26) precise; urgency=low
+
+  * fix perms on /tmp/RULES 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 01 Apr 2015 08:58:47 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion25) precise; urgency=low
+
+  * Issue 679: rule-update: /etc/cron.d/rule-update should run pulledpork as unprivileged user 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 01 Apr 2015 08:56:29 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion24) precise; urgency=low
+
+  * Issue 681: rule-update: wipe snort_dynamicrules directory on sensor
+  * Issue 677: rule-update: create /usr/local/lib/snort_dynamicrules/ if it doesn't already exist
+  * Issue 678: rule-update: /etc/cron.d/rule-update should have 2>&1
+  * Issue 697: rule-update: log snorby reference table update to barnyard2-snorby.log
+
+ -- Doug Burks <doug.burks@gmail.com>  Sun, 08 Mar 2015 21:37:50 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion23) precise; urgency=low
+
+  * Issue 639: rule-update should disable Suricata rules if running Snort
+  * Issue 650: rule-update: wipe snort_dynamicrules directory 
+
+ -- Doug Burks <doug.burks@gmail.com>  Fri, 05 Dec 2014 12:07:10 -0500
+
+securityonion-rule-update (20120726-0ubuntu0securityonion22) precise; urgency=low
+
+  *  Issue 560:	rule-update: run PulledPork with -T option if ENGINE=suricata 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 17 Jul 2014 07:15:51 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion21) precise; urgency=low
+
+  * add back -P option for new pulledpork 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 25 Jun 2014 07:05:37 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion20) precise; urgency=low
+
+  * add verbosity to so-snorby-fix-sigs 
+
+ -- Doug Burks <doug.burks@gmail.com>  Sat, 21 Jun 2014 12:46:15 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion19) precise; urgency=low
+
+  * fix so-snorby-fix-sigs 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 19 Jun 2014 21:37:12 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion18) precise; urgency=low
+
+  * add so-snorby-fix-sigs script 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 19 Jun 2014 21:18:08 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion17) precise; urgency=low
+
+  * only delete Snorby's reference table once for the upgrade to v2 
+
+ -- Doug Burks <doug.burks@gmail.com>  Tue, 17 Jun 2014 20:45:13 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion16) precise; urgency=low
+
+  * Issue 552:	rule-update: run PulledPork with -P option to process tarball
+
+ -- Doug Burks <doug.burks@gmail.com>  Mon, 16 Jun 2014 07:40:10 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion15) precise; urgency=low
+
+  * Issue 411:	Have only one copy of barnyard2 that updates signature reference table
+
+ -- Doug Burks <doug.burks@gmail.com>  Fri, 06 Jun 2014 08:43:39 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion14) precise; urgency=low
+
+  * change wording of user notification 
+
+ -- Doug Burks <doug.burks@gmail.com>  Sat, 31 May 2014 21:07:23 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion13) precise; urgency=low
+
+  * Issue 399: rule-update should allow LOCAL_NIDS_RULE_TUNING to be yes or true
+  * Issue 544: rule-update: notify user if LOCAL_NIDS_RULE_TUNING=true 
+
+ -- Doug Burks <doug.burks@gmail.com>  Sat, 31 May 2014 18:08:05 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion12) precise; urgency=low
+
+  * Check to see if barnyard/snort/suricata are enabled 
+
+ -- Doug Burks <doug.burks@gmail.com>  Sat, 08 Mar 2014 10:45:29 -0500
+
+securityonion-rule-update (20120726-0ubuntu0securityonion11) precise; urgency=low
+
+  * Allow for running PulledPork without Internet connection 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 21 Aug 2013 10:32:03 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion10) precise; urgency=low
+
+  * changed suricata to Suricata 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 08 Aug 2013 14:51:07 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion9) precise; urgency=low
+
+  * minor code cleanup
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 20 Jun 2013 20:45:34 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion8) precise; urgency=low
+
+  * Copy OSSEC local_rules.xml from master to slave 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 20 Jun 2013 10:04:02 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion7) precise; urgency=low
+
+  * Patch from Chris White to allow granular rule tuning per sensor
+
+ -- Doug Burks <doug.burks@gmail.com>  Mon, 17 Jun 2013 21:47:16 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion6) precise; urgency=low
+
+  * copy Sourcefire SO rules 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 13 Jun 2013 16:47:38 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion5) precise; urgency=low
+
+  * sensor should copy threshold.conf and bpf.conf from master 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 03 Oct 2012 16:57:18 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion4) precise; urgency=low
+
+  * make syntax consistent 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 03 Oct 2012 16:33:31 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion3) precise; urgency=low
+
+  * update location of sid-msg.map 
+
+ -- Doug Burks <doug.burks@gmail.com>  Tue, 02 Oct 2012 16:34:03 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion2) precise; urgency=low
+
+  * /etc/nsm/pulledpork/ 
+
+ -- Doug Burks <doug.burks@gmail.com>  Tue, 11 Sep 2012 09:58:51 -0400
+
+securityonion-rule-update (20120726-0ubuntu0securityonion1) precise; urgency=low
+
+  * Initial release
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 26 Jul 2012 19:16:36 -0400
