@@ -1,2 +1,2 @@
 usr
-etc
+etc/cron.d/* etc/nsm/templates/cron.d/

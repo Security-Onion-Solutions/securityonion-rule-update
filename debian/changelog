@@ -1,3 +1,9 @@
+securityonion-rule-update (20120726-0ubuntu0securityonion28) precise; urgency=low
+
+  * don't try to re-install /etc/cron.d/rule-update if box is sensor-only with salt enabled 
+
+ -- Doug Burks <doug.burks@gmail.com>  Sat, 04 Apr 2015 20:41:30 -0400
+
 securityonion-rule-update (20120726-0ubuntu0securityonion27) precise; urgency=low
 
   * su - to change to home directory to prevent issues 

@@ -7,6 +7,17 @@ case "$1" in
         
 	chmod +x /usr/bin/rule-update
 	chmod +x /usr/bin/so-snorby-fix-sigs
+
+	# Package copied rule-update cron job to /etc/nsm/templates/cron.d/rule-update.
+	# Copy this cron job to /etc/cron.d/ but NOT if this is a
+	# sensor-only box with salt enabled.
+	if [ -f /etc/cron.d/salt-update ] && [ ! -f /etc/cron.d/rule-update ]; then
+		echo "This is a sensor-only box with salt enabled."
+		echo "NOT installing /etc/cron.d/rule-update."
+	else
+		echo "Installing /etc/cron.d/rule-update."
+		cp /etc/nsm/templates/cron.d/rule-update /etc/cron.d/rule-update
+	fi
         
     ;;
 

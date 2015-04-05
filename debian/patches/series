@@ -25,3 +25,4 @@ issue-677-678-681-and-697
 Issue-679:-rule-update:-etccron.drule-update-should-run-pulledpork-as-unprivileged-user
 fix-perms-on-tmpRULES
 su---to-change-to-home-directory-to-prevent-issues
+don't-try-to-re-install-etccron.drule-update-if-box-is-sensor-only-with-salt-enabled
