@@ -1,3 +1,9 @@
+securityonion-rule-update (20120726-0ubuntu0securityonion29) precise; urgency=low
+
+  * /etc/cron.d/rule-update should avoid overwhelming rule sites #724 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 05 Aug 2015 11:02:50 -0400
+
 securityonion-rule-update (20120726-0ubuntu0securityonion28) precise; urgency=low
 
   * don't try to re-install /etc/cron.d/rule-update if box is sensor-only with salt enabled 
