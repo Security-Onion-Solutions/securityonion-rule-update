@@ -1,3 +1,9 @@
+securityonion-rule-update (20120726-0ubuntu0securityonion30) trusty; urgency=medium
+
+  * rebuild for trusty 
+
+ -- Doug Burks <doug.burks@gmail.com>  Mon, 05 Oct 2015 16:19:19 -0400
+
 securityonion-rule-update (20120726-0ubuntu0securityonion29) precise; urgency=low
 
   * /etc/cron.d/rule-update should avoid overwhelming rule sites #724 
