@@ -27,3 +27,4 @@ fix-perms-on-tmpRULES
 su---to-change-to-home-directory-to-prevent-issues
 don't-try-to-re-install-etccron.drule-update-if-box-is-sensor-only-with-salt-enabled
 etccron.drule-update-should-avoid-overwhelming-rule-sites-#724
+remove-snorby

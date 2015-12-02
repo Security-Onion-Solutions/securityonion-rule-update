@@ -175,42 +175,9 @@ if [ ! -f $SSH_CONF ]; then
 
 	# Go get rules from Internet.
 	echo "Running PulledPork."
-
 	su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P $PP_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
 		grep -v "normalizations disabled because not inline" |grep -v "^$"
 	
-	# If Snorby is enabled, then we need to wipe and update Snorby's sig_reference table
-	source /etc/nsm/securityonion.conf
-	if [ -d /var/lib/mysql/snorby ] && [ "$SNORBY_ENABLED" = "yes" ]; then
-		# Copy template files into place if they don't already exist
-		if [ ! -f /etc/nsm/rules/gen-msg.map ]; then cp /etc/nsm/templates/snort/gen-msg.map /etc/nsm/rules/; fi
-		if [ ! -f /etc/nsm/rules/classification.config ]; then
-			grep -h -v "^#" /etc/nsm/templates/snort/classification.config /etc/nsm/templates/suricata/classification.config |sort -u > /etc/nsm/rules/classification.config
-		fi
-		if [ ! -f /etc/nsm/rules/reference.config ]; then
-			grep -h -v "^#" /etc/nsm/templates/snort/reference.config /etc/nsm/templates/suricata/reference.config |sort -u > /etc/nsm/rules/reference.config
-		fi
-		mkdir -p /etc/nsm/barnyard2-snorby/
-		cat << EOF > /etc/nsm/barnyard2-snorby/barnyard2.conf
-config logdir: /etc/nsm/barnyard2-snorby
-config classification_file: /etc/nsm/rules/classification.config
-config reference_file:      /etc/nsm/rules/reference.config
-config sid_file:            /etc/nsm/rules/sid-msg.map
-config gen_file:            /etc/nsm/rules/gen-msg.map
-input unified2
-output database: alert, mysql, user=root dbname=snorby host=127.0.0.1
-EOF
-                echo
-                if [ ! -f /etc/nsm/barnyard2-snorby/2.1.13-Build-333 ]; then
-                        echo -n "Deleting Snorby's sig_reference table..."
-                        mysql -uroot -Dsnorby -e "delete from sig_reference;"
-                        touch /etc/nsm/barnyard2-snorby/2.1.13-Build-333
-			echo "done."
-                fi
-                echo -n "Updating Snorby's sig_reference table..."
-		/usr/bin/barnyard2 -c /etc/nsm/barnyard2-snorby/barnyard2.conf > /var/log/nsm/barnyard2-snorby.log 2>&1
-		echo "done."
-	fi
 else
 	# This box is a sensor.  Go get rules from master.
 
