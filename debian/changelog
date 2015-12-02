@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion1) trusty; urgency=medium
+
+  * rebuild package 
+
+ -- Doug Burks <doug.burks@gmail.com>  Tue, 01 Dec 2015 20:02:15 -0500
+
 securityonion-rule-update (20120726-0ubuntu0securityonion31) trusty; urgency=medium
 
   * remove snorby 
