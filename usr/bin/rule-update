@@ -261,7 +261,7 @@ else
 
 		# Process rules local to sensor without starting a separate download.
 		echo "Running PulledPork."		
-		su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P -n "$PP_OPTIONS" -c /etc/nsm/pulledpork/pulledpork.conf" |
+		su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P -n $PP_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
 			grep -v "normalizations disabled because not inline" |grep -v "^$"
 	else
 		#### Default ####
