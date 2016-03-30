@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion2) trusty; urgency=medium
+
+  * securityonion-rule-update: avoid su error #892
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 30 Mar 2016 13:18:19 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion1) trusty; urgency=medium
 
   * rebuild package 

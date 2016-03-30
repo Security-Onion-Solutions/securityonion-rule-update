@@ -1,0 +1,36 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ securityonion-rule-update (20151201-1ubuntu1securityonion2) trusty; urgency=medium
+ .
+   * securityonion-rule-update: avoid su error #892
+Author: Doug Burks <doug.burks@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- securityonion-rule-update-20151201.orig/usr/bin/rule-update
++++ securityonion-rule-update-20151201/usr/bin/rule-update
+@@ -261,7 +261,7 @@ else
+ 
+ 		# Process rules local to sensor without starting a separate download.
+ 		echo "Running PulledPork."		
+-		su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P -n "$PP_OPTIONS" -c /etc/nsm/pulledpork/pulledpork.conf" |
++		su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P -n $PP_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
+ 			grep -v "normalizations disabled because not inline" |grep -v "^$"
+ 	else
+ 		#### Default ####
