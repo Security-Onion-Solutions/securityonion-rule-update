@@ -291,12 +291,16 @@ fi
 
 # If Barnyard is enabled, restart it
 if grep -i 'BARNYARD2_ENABLED="yes"' /etc/nsm/*/sensor.conf >/dev/null 2>&1; then
-	echo "Restarting Barnyard2."
-	/usr/sbin/nsm_sensor_ps-restart --only-barnyard2
+	if pgrep barnyard2 >/dev/null 2>&1; then
+		echo "Restarting Barnyard2."
+		/usr/sbin/nsm_sensor_ps-restart --only-barnyard2
+	fi
 fi
 
 # If the IDS Engine is enabled, restart it
 if grep -i 'IDS_ENGINE_ENABLED="yes"' /etc/nsm/*/sensor.conf >/dev/null 2>&1; then
-	echo "Restarting IDS Engine."
-	/usr/sbin/nsm_sensor_ps-restart --only-snort-alert
+	if pgrep $ENGINE >/dev/null 2>&1; then
+		echo "Restarting IDS Engine."
+		/usr/sbin/nsm_sensor_ps-restart --only-snort-alert
+	fi
 fi

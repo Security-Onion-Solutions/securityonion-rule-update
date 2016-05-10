@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion3) trusty; urgency=medium
+
+  * Issue 909: securityonion-rule-update: ensure barnyard/IDS are running before restarting 
+
+ -- Doug Burks <doug.burks@gmail.com>  Tue, 10 May 2016 15:55:39 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion2) trusty; urgency=medium
 
   * securityonion-rule-update: avoid su error #892

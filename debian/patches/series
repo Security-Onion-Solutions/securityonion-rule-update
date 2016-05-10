@@ -1,1 +1,2 @@
 securityonion-rule-update:-avoid-su-error-#892
+-Issue-909:-securityonion-rule-update:-ensure-barnyardIDS-are-running-before-restarting
