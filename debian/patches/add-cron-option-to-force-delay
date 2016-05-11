@@ -1,0 +1,69 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ securityonion-rule-update (20151201-1ubuntu1securityonion4) trusty; urgency=medium
+ .
+   * add cron option to force delay
+Author: Doug Burks <doug.burks@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- securityonion-rule-update-20151201.orig/etc/cron.d/rule-update
++++ securityonion-rule-update-20151201/etc/cron.d/rule-update
+@@ -5,4 +5,4 @@
+ SHELL=/bin/sh
+ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+ 
+-01 7    * * *   root    date >> /var/log/nsm/pulledpork.log ; /usr/bin/rule-update >> /var/log/nsm/pulledpork.log 2>&1
++01 7    * * *   root    date >> /var/log/nsm/pulledpork.log ; /usr/bin/rule-update cron >> /var/log/nsm/pulledpork.log 2>&1
+--- securityonion-rule-update-20151201.orig/usr/bin/rule-update
++++ securityonion-rule-update-20151201/usr/bin/rule-update
+@@ -1,6 +1,6 @@
+ #!/bin/bash
+ #
+-# Copyright (C) 2008-2015 Doug Burks and Security Onion <doug.burks@gmail.com>
++# Copyright (C) 2008-2016 Doug Burks and Security Onion <doug.burks@gmail.com>
+ #
+ # This program is free software: you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+@@ -122,11 +122,8 @@ SSH_CONF="$SSH_DIR/securityonion_ssh.con
+ if [ ! -f $SSH_CONF ]; then
+ 	# This box is a master server.
+ 
+-	# Determine if we are running interactively or from cron.
+-	# If running interactively, proceed without delay.
+ 	# If running from cron, pause for a random number of minutes (up to 50).
+-	tty -s
+-	if [ $? -gt 0 ]; then
++	if [ $# -eq 1 ] && [ $1 == "cron" ]; then
+ 		RMIN=$(($(dd if=/dev/urandom count=1 2> /dev/null | cksum | cut -d' ' -f1) % 50));
+ 		echo "Sleeping for $RMIN minutes to avoid overwhelming rule sites."
+ 		sleep ${RMIN}m 
+@@ -184,11 +181,8 @@ else
+ 	KEY="$SSH_DIR/securityonion"
+ 	source $SSH_CONF		
+ 
+-	# Determine if we are running interactively or from cron.
+-	# If running interactively, proceed without delay.
+ 	# If running from cron, pause for 60 minutes.
+-	tty -s
+-	if [ $? -gt 0 ]; then
++	if [ $# -eq 1 ] && [ $1 == "cron" ]; then
+ 		echo "Sleeping for 60 minutes to allow master time to download new rules."
+ 		sleep 60m 
+ 	fi

@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion4) trusty; urgency=medium
+
+  * add cron option to force delay 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 11 May 2016 09:14:49 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion3) trusty; urgency=medium
 
   * Issue 909: securityonion-rule-update: ensure barnyard/IDS are running before restarting 

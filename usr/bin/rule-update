@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2008-2015 Doug Burks and Security Onion <doug.burks@gmail.com>
+# Copyright (C) 2008-2016 Doug Burks and Security Onion <doug.burks@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -122,11 +122,8 @@ SSH_CONF="$SSH_DIR/securityonion_ssh.conf"
 if [ ! -f $SSH_CONF ]; then
 	# This box is a master server.
 
-	# Determine if we are running interactively or from cron.
-	# If running interactively, proceed without delay.
 	# If running from cron, pause for a random number of minutes (up to 50).
-	tty -s
-	if [ $? -gt 0 ]; then
+	if [ $# -eq 1 ] && [ $1 == "cron" ]; then
 		RMIN=$(($(dd if=/dev/urandom count=1 2> /dev/null | cksum | cut -d' ' -f1) % 50));
 		echo "Sleeping for $RMIN minutes to avoid overwhelming rule sites."
 		sleep ${RMIN}m 
@@ -184,11 +181,8 @@ else
 	KEY="$SSH_DIR/securityonion"
 	source $SSH_CONF		
 
-	# Determine if we are running interactively or from cron.
-	# If running interactively, proceed without delay.
 	# If running from cron, pause for 60 minutes.
-	tty -s
-	if [ $? -gt 0 ]; then
+	if [ $# -eq 1 ] && [ $1 == "cron" ]; then
 		echo "Sleeping for 60 minutes to allow master time to download new rules."
 		sleep 60m 
 	fi
