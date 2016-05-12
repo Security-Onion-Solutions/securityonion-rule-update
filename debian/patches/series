@@ -1,3 +1,4 @@
 securityonion-rule-update:-avoid-su-error-#892
 -Issue-909:-securityonion-rule-update:-ensure-barnyardIDS-are-running-before-restarting
 add-cron-option-to-force-delay
+check-for-Suricata-process-properly

@@ -293,6 +293,10 @@ fi
 
 # If the IDS Engine is enabled, restart it
 if grep -i 'IDS_ENGINE_ENABLED="yes"' /etc/nsm/*/sensor.conf >/dev/null 2>&1; then
+	# We're about to use pgrep to search for the $ENGINE process (snort or suricata).
+	# "pgrep suricata" won't work since the process shows up as Suricata,
+	# so do "pgrep Suricata" instead.
+	[ "$ENGINE" == "suricata" ] && ENGINE="Suricata"
 	if pgrep $ENGINE >/dev/null 2>&1; then
 		echo "Restarting IDS Engine."
 		/usr/sbin/nsm_sensor_ps-restart --only-snort-alert

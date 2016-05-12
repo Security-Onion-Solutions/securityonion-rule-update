@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion5) trusty; urgency=medium
+
+  * check for Suricata process properly
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 12 May 2016 08:47:13 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion4) trusty; urgency=medium
 
   * add cron option to force delay 
