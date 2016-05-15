@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion6) trusty; urgency=medium
+
+  * random cron delay should be at least 10 minutes 
+
+ -- Doug Burks <doug.burks@gmail.com>  Sun, 15 May 2016 06:51:24 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion5) trusty; urgency=medium
 
   * check for Suricata process properly
