@@ -5,4 +5,4 @@
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
-01 7    * * *   root    date >> /var/log/nsm/pulledpork.log ; /usr/bin/rule-update cron >> /var/log/nsm/pulledpork.log 2>&1
+01 7    * * *   root    /usr/bin/rule-update

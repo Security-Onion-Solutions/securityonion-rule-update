@@ -51,6 +51,9 @@ PULLEDPORK_GROUP=sguil
 # The values above can be overridden in securityonion.conf
 source /etc/nsm/securityonion.conf
 
+# Log file path
+LOG="/var/log/nsm/pulledpork.log"
+
 #########################################
 # OSSEC HIDS Variables and Backups
 #########################################
@@ -59,6 +62,11 @@ source /etc/nsm/securityonion.conf
 HIDS=/var/ossec/rules
 HIDS_RULES=$HIDS/local_rules.xml
 		
+function update(){
+
+# Get current date
+date
+
 # Create backup directory if it doesn't already exist
 HIDS_RULES_BACK=$HIDS/backup
 mkdir -p $HIDS_RULES_BACK
@@ -303,3 +311,5 @@ if grep -i 'IDS_ENGINE_ENABLED="yes"' /etc/nsm/*/sensor.conf >/dev/null 2>&1; th
 		/usr/sbin/nsm_sensor_ps-restart --only-snort-alert
 	fi
 fi
+}
+update 2>&1 | tee -a $LOG
