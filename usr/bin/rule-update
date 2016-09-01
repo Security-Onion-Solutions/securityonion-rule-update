@@ -23,6 +23,11 @@ if [[ $(/usr/bin/id -u) -ne 0 ]]; then
     exit
 fi
 
+# Log file path
+LOG="/var/log/nsm/pulledpork.log"
+
+function update(){
+
 #########################################
 # Variables
 #########################################
@@ -51,8 +56,8 @@ PULLEDPORK_GROUP=sguil
 # The values above can be overridden in securityonion.conf
 source /etc/nsm/securityonion.conf
 
-# Log file path
-LOG="/var/log/nsm/pulledpork.log"
+# Current date
+date
 
 #########################################
 # OSSEC HIDS Variables and Backups
@@ -62,11 +67,6 @@ LOG="/var/log/nsm/pulledpork.log"
 HIDS=/var/ossec/rules
 HIDS_RULES=$HIDS/local_rules.xml
 		
-function update(){
-
-# Get current date
-date
-
 # Create backup directory if it doesn't already exist
 HIDS_RULES_BACK=$HIDS/backup
 mkdir -p $HIDS_RULES_BACK
@@ -131,7 +131,7 @@ if [ ! -f $SSH_CONF ]; then
 	# This box is a master server.
 
 	# If running from cron, pause for a random number of minutes (between 10 and 50).
-	if [ $# -eq 1 ] && [ $1 == "cron" ]; then
+	if [ "dumb" == "$TERM" ]; then
 		RMIN=$(($(dd if=/dev/urandom count=1 2> /dev/null | cksum | cut -d' ' -f1) % 40));
 		let RMIN=RMIN+10
 		echo "Sleeping for $RMIN minutes to avoid overwhelming rule sites."
@@ -191,7 +191,7 @@ else
 	source $SSH_CONF		
 
 	# If running from cron, pause for 60 minutes.
-	if [ $# -eq 1 ] && [ $1 == "cron" ]; then
+	if [ "dumb" == "$TERM" ]; then
 		echo "Sleeping for 60 minutes to allow master time to download new rules."
 		sleep 60m 
 	fi
