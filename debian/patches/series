@@ -3,3 +3,4 @@ securityonion-rule-update:-avoid-su-error-#892
 add-cron-option-to-force-delay
 check-for-Suricata-process-properly
 random-cron-delay-should-be-at-least-10-minutes
+-Issue-985:-rule-update-should-always-log-to-varlognsmpulledpork.log
