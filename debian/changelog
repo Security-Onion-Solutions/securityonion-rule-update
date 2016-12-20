@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion8) trusty; urgency=medium
+
+  * Issue 1034: securityonion-rule-update: update for PulledPork 0.7.2 
+
+ -- Doug Burks <doug.burks@gmail.com>  Tue, 20 Dec 2016 13:44:26 -0500
+
 securityonion-rule-update (20151201-1ubuntu1securityonion7) trusty; urgency=medium
 
   *  Issue 985: rule-update should always log to /var/log/nsm/pulledpork.log 

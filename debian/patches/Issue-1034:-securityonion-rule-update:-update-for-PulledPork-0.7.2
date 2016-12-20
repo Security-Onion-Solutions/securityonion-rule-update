@@ -1,0 +1,105 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ securityonion-rule-update (20151201-1ubuntu1securityonion8) trusty; urgency=medium
+ .
+   * Issue 1034: securityonion-rule-update: update for PulledPork 0.7.2
+Author: Doug Burks <doug.burks@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- securityonion-rule-update-20151201.orig/usr/bin/rule-update
++++ securityonion-rule-update-20151201/usr/bin/rule-update
+@@ -53,6 +53,9 @@ PULLEDPORK_USER=sguil
+ # What group should be given permissions to the pulledpork output?
+ PULLEDPORK_GROUP=sguil
+ 
++# Default to no PulledPork options
++PULLEDPORK_OPTIONS=""
++
+ # The values above can be overridden in securityonion.conf
+ source /etc/nsm/securityonion.conf
+ 
+@@ -158,13 +161,11 @@ if [ ! -f $SSH_CONF ]; then
+ 		fi
+ 	fi
+ 
+-	# Default to no PulledPork options
+-	PP_OPTIONS=""
+ 
+ 	# OPTION: -n if we have no Internet connection
+ 	if [ "$LOCAL_NIDS_RULE_TUNING" == "true" ] || [ "$LOCAL_NIDS_RULE_TUNING" == "yes" ]; then
+ 		cp /opt/emergingthreats/emerging* /tmp
+-		PP_OPTIONS="-n"
++		PULLEDPORK_OPTIONS="-n"
+ 		echo "LOCAL_NIDS_RULE_TUNING is enabled."
+ 		echo "This will cause PulledPork to use the existing rules in /opt/emergingthreats/"
+ 		echo "instead of downloading new rules from the Internet."
+@@ -173,15 +174,25 @@ if [ ! -f $SSH_CONF ]; then
+ 		echo "LOCAL_NIDS_RULE_TUNING=no" 
+ 	fi
+ 
+-	# OPTION: -T if the user is running Suricata
++	# Suricata options
+ 	if [ "$ENGINE" = "suricata" ]; then
+-		PP_OPTIONS="$PP_OPTIONS -T"
+-		echo "ENGINE=suricata, so we'll execute PulledPork with the -T option to avoid adding soid rules to downloaded.rules."
++		# Always use -T option for Suricata:
++		#    -T Process text based rules files only, i.e. DO NOT process so_rules
++		PULLEDPORK_OPTIONS_SURI="-T"
++		# If running an ET ruleset and NO snort.org ruleset, then we can specify -S suricata-x.y.z
++		if grep "^rule_url=https://rules.emergingthreats" /etc/nsm/pulledpork/pulledpork.conf >/dev/null 2>&1; then 
++			if ! grep "^rule_url=https://www.snort.org/reg-rules/|snortrules-snapshot.tar.gz" /etc/nsm/pulledpork/pulledpork.conf >/dev/null 2>&1; then 
++			SURI_VER=`suricata -V  | awk '{print $5}'`
++			PULLEDPORK_OPTIONS_SURI="$PULLEDPORK_OPTIONS_SURI -S suricata-$SURI_VER"
++			fi
++		fi
++		echo "ENGINE=suricata, so we'll execute PulledPork with $PULLEDPORK_OPTIONS_SURI."
++		PULLEDPORK_OPTIONS="$PULLEDPORK_OPTIONS $PULLEDPORK_OPTIONS_SURI"
+ 	fi
+ 
+ 	# Go get rules from Internet.
+ 	echo "Running PulledPork."
+-	su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P $PP_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
++	su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P $PULLEDPORK_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
+ 		grep -v "normalizations disabled because not inline" |grep -v "^$"
+ 	
+ else
+@@ -253,18 +264,16 @@ else
+ 			scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:/tmp/$COMPRESSED_RULE /tmp/
+ 		done
+ 
+-		# Default to no PulledPork options
+-		PP_OPTIONS=""
+-
+ 		# OPTION: -T if the user is running Suricata
+ 		if [ "$ENGINE" = "suricata" ]; then
+-			PP_OPTIONS="$PP_OPTIONS -T"
+-			echo "ENGINE=suricata, so we'll execute PulledPork with the -T option to avoid adding soid rules to downloaded.rules."
++			PULLEDPORK_OPTIONS_SURI="-T"
++			PULLEDPORK_OPTIONS="$PULLEDPORK_OPTIONS $PULLEDPORK_OPTIONS_SURI"
++			echo "ENGINE=suricata, so we'll execute PulledPork with $PULLEDPORK_OPTIONS_SURI."
+ 		fi
+ 
+ 		# Process rules local to sensor without starting a separate download.
+ 		echo "Running PulledPork."		
+-		su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P -n $PP_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
++		su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P -n $PULLEDPORK_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
+ 			grep -v "normalizations disabled because not inline" |grep -v "^$"
+ 	else
+ 		#### Default ####

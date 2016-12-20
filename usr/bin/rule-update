@@ -53,6 +53,9 @@ PULLEDPORK_USER=sguil
 # What group should be given permissions to the pulledpork output?
 PULLEDPORK_GROUP=sguil
 
+# Default to no PulledPork options
+PULLEDPORK_OPTIONS=""
+
 # The values above can be overridden in securityonion.conf
 source /etc/nsm/securityonion.conf
 
@@ -158,13 +161,11 @@ if [ ! -f $SSH_CONF ]; then
 		fi
 	fi
 
-	# Default to no PulledPork options
-	PP_OPTIONS=""
 
 	# OPTION: -n if we have no Internet connection
 	if [ "$LOCAL_NIDS_RULE_TUNING" == "true" ] || [ "$LOCAL_NIDS_RULE_TUNING" == "yes" ]; then
 		cp /opt/emergingthreats/emerging* /tmp
-		PP_OPTIONS="-n"
+		PULLEDPORK_OPTIONS="-n"
 		echo "LOCAL_NIDS_RULE_TUNING is enabled."
 		echo "This will cause PulledPork to use the existing rules in /opt/emergingthreats/"
 		echo "instead of downloading new rules from the Internet."
@@ -173,15 +174,25 @@ if [ ! -f $SSH_CONF ]; then
 		echo "LOCAL_NIDS_RULE_TUNING=no" 
 	fi
 
-	# OPTION: -T if the user is running Suricata
+	# Suricata options
 	if [ "$ENGINE" = "suricata" ]; then
-		PP_OPTIONS="$PP_OPTIONS -T"
-		echo "ENGINE=suricata, so we'll execute PulledPork with the -T option to avoid adding soid rules to downloaded.rules."
+		# Always use -T option for Suricata:
+		#    -T Process text based rules files only, i.e. DO NOT process so_rules
+		PULLEDPORK_OPTIONS_SURI="-T"
+		# If running an ET ruleset and NO snort.org ruleset, then we can specify -S suricata-x.y.z
+		if grep "^rule_url=https://rules.emergingthreats" /etc/nsm/pulledpork/pulledpork.conf >/dev/null 2>&1; then 
+			if ! grep "^rule_url=https://www.snort.org/reg-rules/|snortrules-snapshot.tar.gz" /etc/nsm/pulledpork/pulledpork.conf >/dev/null 2>&1; then 
+			SURI_VER=`suricata -V  | awk '{print $5}'`
+			PULLEDPORK_OPTIONS_SURI="$PULLEDPORK_OPTIONS_SURI -S suricata-$SURI_VER"
+			fi
+		fi
+		echo "ENGINE=suricata, so we'll execute PulledPork with $PULLEDPORK_OPTIONS_SURI."
+		PULLEDPORK_OPTIONS="$PULLEDPORK_OPTIONS $PULLEDPORK_OPTIONS_SURI"
 	fi
 
 	# Go get rules from Internet.
 	echo "Running PulledPork."
-	su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P $PP_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
+	su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P $PULLEDPORK_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
 		grep -v "normalizations disabled because not inline" |grep -v "^$"
 	
 else
@@ -253,18 +264,16 @@ else
 			scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:/tmp/$COMPRESSED_RULE /tmp/
 		done
 
-		# Default to no PulledPork options
-		PP_OPTIONS=""
-
 		# OPTION: -T if the user is running Suricata
 		if [ "$ENGINE" = "suricata" ]; then
-			PP_OPTIONS="$PP_OPTIONS -T"
-			echo "ENGINE=suricata, so we'll execute PulledPork with the -T option to avoid adding soid rules to downloaded.rules."
+			PULLEDPORK_OPTIONS_SURI="-T"
+			PULLEDPORK_OPTIONS="$PULLEDPORK_OPTIONS $PULLEDPORK_OPTIONS_SURI"
+			echo "ENGINE=suricata, so we'll execute PulledPork with $PULLEDPORK_OPTIONS_SURI."
 		fi
 
 		# Process rules local to sensor without starting a separate download.
 		echo "Running PulledPork."		
-		su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P -n $PP_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
+		su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P -n $PULLEDPORK_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
 			grep -v "normalizations disabled because not inline" |grep -v "^$"
 	else
 		#### Default ####
