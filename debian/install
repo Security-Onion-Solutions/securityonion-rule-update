@@ -1,2 +1,2 @@
-usr
+usr/bin/rule-update usr/sbin
 etc/cron.d/* etc/nsm/templates/cron.d/

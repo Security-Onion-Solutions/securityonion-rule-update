@@ -5,8 +5,8 @@ set -e
 case "$1" in
     configure)
         
-	chmod +x /usr/bin/rule-update
-	chmod +x /usr/bin/so-snorby-fix-sigs
+	chmod +x /usr/sbin/rule-update
+	#chmod +x /usr/bin/so-snorby-fix-sigs
 
 	# Package copied rule-update cron job to /etc/nsm/templates/cron.d/rule-update.
 	# Copy this cron job to /etc/cron.d/ but NOT if this is a

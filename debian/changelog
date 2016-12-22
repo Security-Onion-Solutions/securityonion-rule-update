@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion9) trusty; urgency=medium
+
+  * Move scripts from /usr/bin/ to /usr/sbin/ #1042 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 22 Dec 2016 15:04:51 -0500
+
 securityonion-rule-update (20151201-1ubuntu1securityonion8) trusty; urgency=medium
 
   * Issue 1034: securityonion-rule-update: update for PulledPork 0.7.2 

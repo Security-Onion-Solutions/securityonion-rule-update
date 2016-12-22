@@ -5,4 +5,4 @@
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
-01 7    * * *   root    /usr/bin/rule-update
+01 7    * * *   root    /usr/sbin/rule-update

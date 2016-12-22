@@ -1,0 +1,33 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ securityonion-rule-update (20151201-1ubuntu1securityonion9) trusty; urgency=medium
+ .
+   * Move scripts from /usr/bin/ to /usr/sbin/ #1042
+Author: Doug Burks <doug.burks@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- securityonion-rule-update-20151201.orig/etc/cron.d/rule-update
++++ securityonion-rule-update-20151201/etc/cron.d/rule-update
+@@ -5,4 +5,4 @@
+ SHELL=/bin/sh
+ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+ 
+-01 7    * * *   root    /usr/bin/rule-update
++01 7    * * *   root    /usr/sbin/rule-update
