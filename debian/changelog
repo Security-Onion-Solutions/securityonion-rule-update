@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion10) trusty; urgency=medium
+
+  * securityonion-rule-update: Restore stdout/stderr redirect in crontab #1054 
+
+ -- Doug Burks <doug.burks@gmail.com>  Wed, 04 Jan 2017 08:53:37 -0500
+
 securityonion-rule-update (20151201-1ubuntu1securityonion9) trusty; urgency=medium
 
   * Move scripts from /usr/bin/ to /usr/sbin/ #1042 
