@@ -176,11 +176,11 @@ if [ ! -f $SSH_CONF ]; then
 
 	# Suricata options
 	if [ "$ENGINE" = "suricata" ]; then
-		# Check for local Snort rules that need to be removed
+		# Check if Suricata events rules are present. 
 		if grep -x "^local_rules=/etc/nsm/rules/local.rules" /etc/nsm/pulledpork/pulledpork.conf >/dev/null 2>&1; then
 			# Backup pulledpork.conf
 			cp /etc/nsm/pulledpork/pulledpork.conf /etc/nsm/pulledpork/pulledpork.conf.bak.`date +%Y%m%d`
-			# Remove local Snort rules
+			# Add Suricata events rules
 			sed -i 's|^local_rules=/etc/nsm/rules/local.rules|local_rules=/etc/nsm/rules/local.rules,/etc/nsm/rules/decoder-events.rules,/etc/nsm/rules/stream-events.rules,/etc/nsm/rules/http-events.rules,/etc/nsm/rules/smtp-events.rules|g' /etc/nsm/pulledpork/pulledpork.conf
 		fi
 		# Always use -T option for Suricata:
