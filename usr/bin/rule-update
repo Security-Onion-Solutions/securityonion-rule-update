@@ -197,6 +197,11 @@ if [ ! -f $SSH_CONF ]; then
 		PULLEDPORK_OPTIONS="$PULLEDPORK_OPTIONS $PULLEDPORK_OPTIONS_SURI"
 	fi
 
+	# Issue 1069: change labs.snort.org to talosintelligence.com
+	# https://github.com/Security-Onion-Solutions/security-onion/issues/1069
+	# http://blog.snort.org/2017/01/labssnortorg-has-been-decommissioned.html
+	sed -i 's|labs.snort.org|talosintelligence.com|g' /etc/nsm/pulledpork/pulledpork.conf
+
 	# Go get rules from Internet.
 	echo "Running PulledPork."
 	su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P $PULLEDPORK_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |

@@ -7,3 +7,4 @@ random-cron-delay-should-be-at-least-10-minutes
 Issue-1034:-securityonion-rule-update:-update-for-PulledPork-0.7.2
 Move-scripts-from-usrbin-to-usrsbin-#1042
 securityonion-rule-update:-Restore-stdoutstderr-redirect-in-crontab-#1054
+issues-1141-and-1069

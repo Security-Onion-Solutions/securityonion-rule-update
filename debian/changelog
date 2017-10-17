@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion11) trusty; urgency=medium
+
+  * issues 1141 and 1069 
+
+ -- Doug Burks <doug.burks@gmail.com>  Tue, 17 Oct 2017 10:09:21 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion10) trusty; urgency=medium
 
   * securityonion-rule-update: Restore stdout/stderr redirect in crontab #1054 
