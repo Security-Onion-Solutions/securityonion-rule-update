@@ -197,6 +197,20 @@ if [ ! -f $SSH_CONF ]; then
 		PULLEDPORK_OPTIONS="$PULLEDPORK_OPTIONS $PULLEDPORK_OPTIONS_SURI"
 	fi
 
+	# Issue 1153: rule-update: disable noisy Suricata events if Setup hasn't already
+	# https://github.com/Security-Onion-Solutions/security-onion/issues/1153
+        if ! grep "Security Onion Setup" /etc/nsm/pulledpork/disablesid.conf >/dev/null 2>&1; then
+		# Create a backup copy of the existing file
+		cp /etc/nsm/pulledpork/disablesid.conf /etc/nsm/pulledpork/disablesid.conf.`date +%Y%m%d`
+		# Append the new settings to the file
+cat << EOF >> /etc/nsm/pulledpork/disablesid.conf
+
+# Added by Security Onion Setup
+stream-events
+pcre:SURICATA\ ICMPv6
+EOF
+        fi
+
 	# Issue 1069: change labs.snort.org to talosintelligence.com
 	# https://github.com/Security-Onion-Solutions/security-onion/issues/1069
 	# http://blog.snort.org/2017/01/labssnortorg-has-been-decommissioned.html
