@@ -216,6 +216,20 @@ EOF
 	# http://blog.snort.org/2017/01/labssnortorg-has-been-decommissioned.html
 	sed -i 's|labs.snort.org|talosintelligence.com|g' /etc/nsm/pulledpork/pulledpork.conf
 
+	# Issue 1250: rule-update: update distro in pulledpork.conf
+	# https://github.com/Security-Onion-Solutions/security-onion/issues/1250
+	# https://blog.snort.org/2018/03/shared-object-rule-os-build-change-is.html
+	# change distro to Ubuntu-14-4 or Ubuntu-16-4 as appropriate
+	FILE="/etc/os-release"
+	if [ -f $FILE ]; then
+		# In the case of Ubuntu 14.04, VERSION_ID="14.04"
+		# pull out the "14.04" and replace the ".0" with "-" to make it "14-4"
+		DISTRO_VERSION=$(grep VERSION_ID $FILE | cut -d\" -f2 | sed 's|.0|-|g')
+		DISTRO="Ubuntu-$DISTRO_VERSION"
+		# Find the line that begins with "distro=" and replace the line with our new distro setting
+		sed -i "s|^distro=.*$|distro=$DISTRO|g" /etc/nsm/pulledpork/pulledpork.conf
+	fi
+
 	# Go get rules from Internet.
 	echo "Running PulledPork."
 	su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P $PULLEDPORK_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |

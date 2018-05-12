@@ -1,0 +1,48 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ securityonion-rule-update (20151201-1ubuntu1securityonion12) trusty; urgency=medium
+ .
+   * rule-update: disable noisy Suricata events if Setup hasn't already #1153
+Author: Doug Burks <doug.burks@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- securityonion-rule-update-20151201.orig/usr/bin/rule-update
++++ securityonion-rule-update-20151201/usr/bin/rule-update
+@@ -197,6 +197,20 @@ if [ ! -f $SSH_CONF ]; then
+ 		PULLEDPORK_OPTIONS="$PULLEDPORK_OPTIONS $PULLEDPORK_OPTIONS_SURI"
+ 	fi
+ 
++	# Issue 1153: rule-update: disable noisy Suricata events if Setup hasn't already
++	# https://github.com/Security-Onion-Solutions/security-onion/issues/1153
++        if ! grep "Security Onion Setup" /etc/nsm/pulledpork/disablesid.conf >/dev/null 2>&1; then
++		# Create a backup copy of the existing file
++		cp /etc/nsm/pulledpork/disablesid.conf /etc/nsm/pulledpork/disablesid.conf.`date +%Y%m%d`
++		# Append the new settings to the file
++cat << EOF >> /etc/nsm/pulledpork/disablesid.conf
++
++# Added by Security Onion Setup
++stream-events
++pcre:SURICATA\ ICMPv6
++EOF
++        fi
++
+ 	# Issue 1069: change labs.snort.org to talosintelligence.com
+ 	# https://github.com/Security-Onion-Solutions/security-onion/issues/1069
+ 	# http://blog.snort.org/2017/01/labssnortorg-has-been-decommissioned.html

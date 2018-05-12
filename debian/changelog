@@ -1,3 +1,15 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion13) trusty; urgency=medium
+
+  * rule-update: update distro in pulledpork.conf #1250 
+
+ -- Doug Burks <doug.burks@gmail.com>  Sat, 12 May 2018 07:17:13 -0400
+
+securityonion-rule-update (20151201-1ubuntu1securityonion12) trusty; urgency=medium
+
+  * rule-update: disable noisy Suricata events if Setup hasn't already #1153 
+
+ -- Doug Burks <doug.burks@gmail.com>  Tue, 24 Oct 2017 11:29:46 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion11) trusty; urgency=medium
 
   * issues 1141 and 1069 
