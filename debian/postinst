@@ -6,7 +6,6 @@ case "$1" in
     configure)
         
 	chmod +x /usr/sbin/rule-update
-	#chmod +x /usr/bin/so-snorby-fix-sigs
 
 	# Package copied rule-update cron job to /etc/nsm/templates/cron.d/rule-update.
 	# Copy this cron job to /etc/cron.d/ but NOT if this is a
@@ -19,6 +18,15 @@ case "$1" in
 		cp /etc/nsm/templates/cron.d/rule-update /etc/cron.d/rule-update
 	fi
         
+	# older versions of rule-update copied local_rules.xml to local_rules_orig.xml which would cause duplicate rule issues with wazuh
+	# rule-update ossec backup local rules issue #1572
+	# https://github.com/Security-Onion-Solutions/security-onion/issues/1572
+	# if the file exists, move it to the backup directory
+	FILE="/var/ossec/rules/local_rules_orig.xml"
+	if [ -f $FILE ]; then
+		mv $FILE /var/ossec/rules/backup/ || echo "Error moving $FILE to /var/ossec/rules/backup/"
+	fi
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

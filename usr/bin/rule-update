@@ -260,8 +260,13 @@ else
 		#if [ ! -f $HIDS_RULES_ORIG ]; then
 		#	cp $HIDS_RULES $HIDS_RULES_ORIG
 		#fi
-		# that now causes issues with Wazuh, so let's remove it if it exists
-		rm -f $HIDS_RULES_ORIG
+		# older versions of rule-update copied local_rules.xml to local_rules_orig.xml which would cause duplicate rule issues with wazuh
+		# rule-update ossec backup local rules issue #1572
+		# https://github.com/Security-Onion-Solutions/security-onion/issues/1572
+		# if the file exists, move it to the backup directory
+		if [ -f $HIDS_RULES_ORIG ]; then
+			mv $HIDS_RULES_ORIG $HIDS/backup/ || echo "Error moving $HIDS_RULES_ORIG to $HIDS/backup/"
+		fi
 
 		# Copy local.rules.xml from master.
 		scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:/tmp/local_rules.xml $HIDS_RULES
