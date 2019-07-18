@@ -1,3 +1,21 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion15) xenial; urgency=medium
+
+  * rule-update ossec backup local rules issue Security-Onion-Solutions/security-onion#1572 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 18 Jul 2019 14:21:39 -0400
+
+securityonion-rule-update (20151201-1ubuntu1securityonion14) xenial; urgency=medium
+
+  * fix version 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 17 May 2018 11:30:01 -0400
+
+securityonion-rule-update (20151201-1ubuntu1securityonion13) xenial; urgency=medium
+
+  * move pulledpork.conf changes higher to apply to both master and sensors 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 17 May 2018 11:28:22 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion13) trusty; urgency=medium
 
   * rule-update: update distro in pulledpork.conf #1250 

@@ -1,0 +1,50 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ securityonion-rule-update (20151201-1ubuntu1securityonion15) xenial; urgency=medium
+ .
+   * rule-update ossec backup local rules issue Security-Onion-Solutions/security-onion#1572
+Author: Doug Burks <doug.burks@gmail.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- securityonion-rule-update-20151201.orig/usr/bin/rule-update
++++ securityonion-rule-update-20151201/usr/bin/rule-update
+@@ -254,15 +254,14 @@ else
+ 		echo "LOCAL_HIDS_RULE_TUNING enabled."
+ 		echo "NOT copying local_rules.xml from master server."
+ 	else
+-		# We're changing the default behavior
+-		# since we're now copying OSSEC rules from master
+-		# to sensor (we weren't doing that originally).
+-		# So we need to make a local_rules_orig in case the user
+-		# had already customized local_rules.xml.
+ 		HIDS_RULES_ORIG=$HIDS/local_rules_orig.xml
+-		if [ ! -f $HIDS_RULES_ORIG ]; then
+-			cp $HIDS_RULES $HIDS_RULES_ORIG
+-		fi
++		# HIDS_RULES was already backed up at the top of the script
++		# but at one point we were backing up to local_rules_orig.xml:
++		#if [ ! -f $HIDS_RULES_ORIG ]; then
++		#	cp $HIDS_RULES $HIDS_RULES_ORIG
++		#fi
++		# that now causes issues with Wazuh, so let's remove it if it exists
++		rm -f $HIDS_RULES_ORIG
+ 
+ 		# Copy local.rules.xml from master.
+ 		scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:/tmp/local_rules.xml $HIDS_RULES

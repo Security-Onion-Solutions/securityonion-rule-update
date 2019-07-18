@@ -124,6 +124,28 @@ mkdir -p /home/$PULLEDPORK_USER
 chown -R $PULLEDPORK_USER /home/$PULLEDPORK_USER
 
 #########################################
+# Update /etc/nsm/pulledpork/pulledpork.conf
+#########################################
+# Issue 1069: change labs.snort.org to talosintelligence.com
+# https://github.com/Security-Onion-Solutions/security-onion/issues/1069
+# http://blog.snort.org/2017/01/labssnortorg-has-been-decommissioned.html
+sed -i 's|labs.snort.org|talosintelligence.com|g' /etc/nsm/pulledpork/pulledpork.conf
+
+# Issue 1250: rule-update: update distro in pulledpork.conf
+# https://github.com/Security-Onion-Solutions/security-onion/issues/1250
+# https://blog.snort.org/2018/03/shared-object-rule-os-build-change-is.html
+# change distro to Ubuntu-14-4 or Ubuntu-16-4 as appropriate
+FILE="/etc/os-release"
+if [ -f $FILE ]; then
+	# In the case of Ubuntu 14.04, VERSION_ID="14.04"
+	# pull out the "14.04" and replace the ".0" with "-" to make it "14-4"
+	DISTRO_VERSION=$(grep VERSION_ID $FILE | cut -d\" -f2 | sed 's|.0|-|g')
+	DISTRO="Ubuntu-$DISTRO_VERSION"
+	# Find the line that begins with "distro=" and replace the line with our new distro setting
+	sed -i "s|^distro=.*$|distro=$DISTRO|g" /etc/nsm/pulledpork/pulledpork.conf
+fi
+
+#########################################
 # Is this box a master or slave?
 #########################################
 
@@ -160,7 +182,6 @@ if [ ! -f $SSH_CONF ]; then
 			mv /usr/local/lib/snort_dynamicrules/*.so /usr/local/lib/snort_dynamicrules_backup/ 
 		fi
 	fi
-
 
 	# OPTION: -n if we have no Internet connection
 	if [ "$LOCAL_NIDS_RULE_TUNING" == "true" ] || [ "$LOCAL_NIDS_RULE_TUNING" == "yes" ]; then
@@ -211,25 +232,6 @@ pcre:SURICATA\ ICMPv6
 EOF
         fi
 
-	# Issue 1069: change labs.snort.org to talosintelligence.com
-	# https://github.com/Security-Onion-Solutions/security-onion/issues/1069
-	# http://blog.snort.org/2017/01/labssnortorg-has-been-decommissioned.html
-	sed -i 's|labs.snort.org|talosintelligence.com|g' /etc/nsm/pulledpork/pulledpork.conf
-
-	# Issue 1250: rule-update: update distro in pulledpork.conf
-	# https://github.com/Security-Onion-Solutions/security-onion/issues/1250
-	# https://blog.snort.org/2018/03/shared-object-rule-os-build-change-is.html
-	# change distro to Ubuntu-14-4 or Ubuntu-16-4 as appropriate
-	FILE="/etc/os-release"
-	if [ -f $FILE ]; then
-		# In the case of Ubuntu 14.04, VERSION_ID="14.04"
-		# pull out the "14.04" and replace the ".0" with "-" to make it "14-4"
-		DISTRO_VERSION=$(grep VERSION_ID $FILE | cut -d\" -f2 | sed 's|.0|-|g')
-		DISTRO="Ubuntu-$DISTRO_VERSION"
-		# Find the line that begins with "distro=" and replace the line with our new distro setting
-		sed -i "s|^distro=.*$|distro=$DISTRO|g" /etc/nsm/pulledpork/pulledpork.conf
-	fi
-
 	# Go get rules from Internet.
 	echo "Running PulledPork."
 	su - $PULLEDPORK_USER -c "/usr/bin/pulledpork.pl -P $PULLEDPORK_OPTIONS -c /etc/nsm/pulledpork/pulledpork.conf" |
@@ -252,15 +254,14 @@ else
 		echo "LOCAL_HIDS_RULE_TUNING enabled."
 		echo "NOT copying local_rules.xml from master server."
 	else
-		# We're changing the default behavior
-		# since we're now copying OSSEC rules from master
-		# to sensor (we weren't doing that originally).
-		# So we need to make a local_rules_orig in case the user
-		# had already customized local_rules.xml.
 		HIDS_RULES_ORIG=$HIDS/local_rules_orig.xml
-		if [ ! -f $HIDS_RULES_ORIG ]; then
-			cp $HIDS_RULES $HIDS_RULES_ORIG
-		fi
+		# HIDS_RULES was already backed up at the top of the script
+		# but at one point we were backing up to local_rules_orig.xml:
+		#if [ ! -f $HIDS_RULES_ORIG ]; then
+		#	cp $HIDS_RULES $HIDS_RULES_ORIG
+		#fi
+		# that now causes issues with Wazuh, so let's remove it if it exists
+		rm -f $HIDS_RULES_ORIG
 
 		# Copy local.rules.xml from master.
 		scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:/tmp/local_rules.xml $HIDS_RULES
