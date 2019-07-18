@@ -21,10 +21,11 @@ case "$1" in
 	# older versions of rule-update copied local_rules.xml to local_rules_orig.xml which would cause duplicate rule issues with wazuh
 	# rule-update ossec backup local rules issue #1572
 	# https://github.com/Security-Onion-Solutions/security-onion/issues/1572
-	# if the file exists, move it to the backup directory
+	# if the file exists, rename it with a .orig file extension
 	FILE="/var/ossec/rules/local_rules_orig.xml"
+	FILENEW="/var/ossec/rules/local_rules.xml.orig"
 	if [ -f $FILE ]; then
-		mv $FILE /var/ossec/rules/backup/ || echo "Error moving $FILE to /var/ossec/rules/backup/"
+		mv $FILE $FILENEW || echo "Error renaming $FILE to $FILENEW"
 	fi
 
     ;;

@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion17) xenial; urgency=medium
+
+  * rule-update ossec backup local rules issue Security-Onion-Solutions/security-onion#1572 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 18 Jul 2019 15:33:20 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion16) xenial; urgency=medium
 
   * rule-update ossec backup local rules issue Security-Onion-Solutions/security-onion#1572 

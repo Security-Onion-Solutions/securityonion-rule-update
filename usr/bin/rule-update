@@ -254,18 +254,21 @@ else
 		echo "LOCAL_HIDS_RULE_TUNING enabled."
 		echo "NOT copying local_rules.xml from master server."
 	else
-		HIDS_RULES_ORIG=$HIDS/local_rules_orig.xml
 		# HIDS_RULES was already backed up at the top of the script
 		# but at one point we were backing up to local_rules_orig.xml:
+		#HIDS_RULES_ORIG=$HIDS/local_rules_orig.xml
 		#if [ ! -f $HIDS_RULES_ORIG ]; then
 		#	cp $HIDS_RULES $HIDS_RULES_ORIG
 		#fi
+
 		# older versions of rule-update copied local_rules.xml to local_rules_orig.xml which would cause duplicate rule issues with wazuh
 		# rule-update ossec backup local rules issue #1572
 		# https://github.com/Security-Onion-Solutions/security-onion/issues/1572
-		# if the file exists, move it to the backup directory
-		if [ -f $HIDS_RULES_ORIG ]; then
-			mv $HIDS_RULES_ORIG $HIDS/backup/ || echo "Error moving $HIDS_RULES_ORIG to $HIDS/backup/"
+		# if the file exists, rename it with a .orig file extension
+		FILE="/var/ossec/rules/local_rules_orig.xml"
+		FILENEW="/var/ossec/rules/local_rules.xml.orig"
+		if [ -f $FILE ]; then
+			mv $FILE $FILENEW || echo "Error renaming $FILE to $FILENEW"
 		fi
 
 		# Copy local.rules.xml from master.

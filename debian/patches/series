@@ -13,3 +13,4 @@ rule-update:-update-distro-in-pulledpork.conf-#1250
 move-pulledpork.conf-changes-higher-in-script-to-apply-to-both-master-and-sensors
 rule-update-ossec-backup-local-rules-issue-Security-Onion-Solutionssecurity-onion#1572
 rule-update-ossec-backup-local-rules-issue-Security-Onion-Solutionssecurity-onion#1572-second-fix
+rule-update-ossec-backup-local-rules-issue-Security-Onion-Solutionssecurity-onion#1572-just-rename-the-file
