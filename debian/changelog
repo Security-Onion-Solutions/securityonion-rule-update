@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion18) xenial; urgency=medium
+
+  * rule-update: if non-master and salt is enabled, then just run state.highstate Security-Onion-Solutions/security-onion#1574 
+
+ -- Doug Burks <doug.burks@gmail.com>  Fri, 19 Jul 2019 08:23:27 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion17) xenial; urgency=medium
 
   * rule-update ossec backup local rules issue Security-Onion-Solutions/security-onion#1572 
