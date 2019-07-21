@@ -340,6 +340,8 @@ else
 		echo "Copying rules from $SERVERNAME."
 		scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:$NIDS/downloaded.rules 	$NIDS/downloaded.rules
 		scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:$NIDS/local.rules 	$NIDS/local.rules
+                scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:$NIDS/black_list.rules  $NIDS/black_list.rules
+                scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:$NIDS/white_list.rules  $NIDS/white_list.rules
 		scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:$NIDS/sid-msg.map 	$NIDS/sid-msg.map
 		scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:$NIDS/threshold.conf 	$NIDS/threshold.conf
 		scp -i "$KEY" $SSH_USERNAME@$SERVERNAME:$NIDS/bpf.conf 		$NIDS/bpf.conf
