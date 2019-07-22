@@ -15,3 +15,4 @@ rule-update-ossec-backup-local-rules-issue-Security-Onion-Solutionssecurity-onio
 rule-update-ossec-backup-local-rules-issue-Security-Onion-Solutionssecurity-onion#1572-second-fix
 rule-update-ossec-backup-local-rules-issue-Security-Onion-Solutionssecurity-onion#1572-just-rename-the-file
 rule-update:-if-non-master-and-salt-is-enabled,-then-just-run-state.highstate-Security-Onion-Solutionssecurity-onion#1574
+rule-update:-Add-white_list.rules-and-black_list.rules-to-worker-sync-Security-Onion-Solutionssecurity-onion#1577

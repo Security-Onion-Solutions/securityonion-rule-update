@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion19) xenial; urgency=medium
+
+  * rule-update: Add white_list.rules and black_list.rules to worker sync Security-Onion-Solutions/security-onion#1577 
+
+ -- Doug Burks <doug.burks@gmail.com>  Mon, 22 Jul 2019 07:01:10 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion18) xenial; urgency=medium
 
   * rule-update: if non-master and salt is enabled, then just run state.highstate Security-Onion-Solutions/security-onion#1574 
