@@ -1,3 +1,9 @@
+securityonion-rule-update (20151201-1ubuntu1securityonion20) xenial; urgency=medium
+
+  * Insufficient interactive session detection during rule update Security-Onion-Solutions/security-onion#1650 
+
+ -- Doug Burks <doug.burks@gmail.com>  Thu, 17 Oct 2019 13:56:50 -0400
+
 securityonion-rule-update (20151201-1ubuntu1securityonion19) xenial; urgency=medium
 
   * rule-update: Add white_list.rules and black_list.rules to worker sync Security-Onion-Solutions/security-onion#1577 

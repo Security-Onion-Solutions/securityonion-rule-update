@@ -36,7 +36,7 @@ fi
 # Log file path
 LOG="/var/log/nsm/pulledpork.log"
 
-function update(){
+function update() {
 
 #########################################
 # Variables
@@ -166,7 +166,7 @@ if [ ! -f $SSH_CONF ]; then
 	# This box is a master server.
 
 	# If running from cron, pause for a random number of minutes (between 10 and 50).
-	if [ "dumb" == "$TERM" ]; then
+	if [ $# -eq 1 ] && [ $1 == "cron" ]; then
 		RMIN=$(($(dd if=/dev/urandom count=1 2> /dev/null | cksum | cut -d' ' -f1) % 40));
 		let RMIN=RMIN+10
 		echo "Sleeping for $RMIN minutes to avoid overwhelming rule sites."
@@ -254,7 +254,7 @@ else
 	source $SSH_CONF		
 
 	# If running from cron, pause for 60 minutes.
-	if [ "dumb" == "$TERM" ]; then
+	if [ $# -eq 1 ] && [ $1 == "cron" ]; then
 		echo "Sleeping for 60 minutes to allow master time to download new rules."
 		sleep 60m 
 	fi
@@ -382,4 +382,5 @@ if grep -i 'IDS_ENGINE_ENABLED="yes"' /etc/nsm/*/sensor.conf >/dev/null 2>&1; th
 	fi
 fi
 }
-update 2>&1 | tee -a $LOG
+
+update "$@" 2>&1 | tee -a $LOG
